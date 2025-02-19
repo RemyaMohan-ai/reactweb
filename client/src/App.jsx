@@ -6,11 +6,15 @@ import About from './pages/About'
 import Signin from './pages/Signin'
 import Signup from './pages/Signup'
 
+
+import Navbar  from './components/Navbar'
 function App() {
 
   return (
     <>
     <BrowserRouter>
+    <Navbar></Navbar>
+
       <Routes>
         <Route path='/' element ={<Home></Home>} ></Route>
         <Route path='/signin' element ={<Signin></Signin>} ></Route>
