@@ -3,6 +3,7 @@ import { useState } from "react"
 import {Link ,useNavigate} from 'react-router-dom'
 import { signInFailure,SignInStart,SignInSuccess } from '../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import OAuth from "../components/OAuth"
 const Signin = () => {
   const[formdata ,setFormdata] = useState({})
   // const[loading ,setLoading] = useState(false)
@@ -63,6 +64,7 @@ const handleSubmit =async(e)=>{
          <input type="password" name="" id="password" placeholder='password' className='bg-slate-100 rounded-md p-3' 
          onChange={handleChange}/>
          <button disabled={loading} className='uppercase bg-purple-950 text-white rounded-lg p-3 hover:opacity-90 cursor-pointer disabled:opacity-70 '> {loading ? 'Loading...' : 'Sign In'}</button>
+         <OAuth/>
        </form>
      </div>
      <div className='flex pt-4'>
