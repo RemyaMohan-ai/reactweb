@@ -5,7 +5,8 @@ import {updateUserStart,
   updateUserSuccess,
   deleteUserFailure,
   deleteUserStart,
-  deleteUserSuccess} from '../redux/user/userSlice'
+  deleteUserSuccess,
+  signOut} from '../redux/user/userSlice'
 import Swal from 'sweetalert2'
 
 export default function profile() {
@@ -147,6 +148,32 @@ export default function profile() {
     })
     
   }
+
+  const handleSignOut = async() =>{
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be signed out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Sign Out!",
+    }).then(async (result) => {
+      try {
+        await fetch ('/api/auth/signout');
+        dispatch(signOut())
+        Swal.fire("Signed Out!", "You have been signed out.", "success");
+      } catch (error) {
+        console.log(error);
+        Swal.fire("Error!", "Something went wrong.", "error");
+      }
+    })
+   
+  }
+
+
+
+
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'> Profile  </h1>
@@ -165,7 +192,7 @@ export default function profile() {
       </form>
       <div className='flex justify-between mt-5'>
         <span onClick={handleDeleteAccount} className='text-red-700 cursor-pointer'>Delete Account</span>
-        <span className='text-red-500 cursor-pointer'>Sign Out</span>
+        <span className='text-red-500 cursor-pointer'onClick={handleSignOut}>Sign Out</span>
       </div>
 
       {/* <p className='text-red-700 mt-5'>{error && 'something went wrong'}</p> */}

@@ -34,7 +34,7 @@ export const signin = async(req,res,next)=>{
 
       const { password : hashedPassword ,...rest} =validUser._doc
    //   res.cookie("access_token",token,{httpOnly : true ,  maxAge: 24 * 60 * 60 * 1000,}).status(200).json(rest)
-   const expiryDate = new Date(Date.now() + 3600000)
+   const expiryDate = new Date(Date.now() + 360000000)
     res
     .cookie("access_token", token, { 
       httpOnly: true,
@@ -56,7 +56,7 @@ export const google = async(req,res,next)=>{
 
          const{password : hashedPassword ,...rest} =user._doc
          // res.cookie("access_token",token,{httpOnly : true ,  maxAge: 24 * 60 * 60 * 1000,}).status(200).json(rest)
-         const expiryDate = new Date(Date.now() + 3600000)
+         const expiryDate = new Date(Date.now() + 360000000)
          res.cookie("access_token", token, { httpOnly: true, expires: expiryDate,path: '/',  })
          .status(200).json(rest);
       }else{
@@ -72,7 +72,7 @@ export const google = async(req,res,next)=>{
          const token = jwt.sign({id : newUser._id} , process.env.JWT_SECRET);
          const{password : hashedPassword2 ,...rest} =newUser._doc
          // return res.cookie("access_token",token,{httpOnly : true ,  maxAge: 24 * 60 * 60 * 1000,}).status(200).json(rest)
-         const expiryDate = new Date(Date.now() + 3600000)
+         const expiryDate = new Date(Date.now() + 360000000)
          res.cookie("access_token", token, { httpOnly: true, expires: expiryDate ,path: '/',  })
          .status(200).json(rest);
       
@@ -81,3 +81,7 @@ export const google = async(req,res,next)=>{
       next(error)
    }
 }
+
+export const signout =(req,res) => {
+   res.clearCookie('access_token').status(200).json('signout success')
+ }
