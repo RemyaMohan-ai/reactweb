@@ -1,6 +1,12 @@
 import { useSelector ,useDispatch} from 'react-redux'
 import { useEffect, useRef, useState } from 'react'
-import {updateUserStart,updateUserFailure,updateUserSuccess} from '../redux/user/userSlice'
+import {updateUserStart,
+  updateUserFailure,
+  updateUserSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess} from '../redux/user/userSlice'
+import Swal from 'sweetalert2'
 
 export default function profile() {
     const {currentUser, error} = useSelector((state )=>state.user)
@@ -43,7 +49,7 @@ export default function profile() {
     
        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,{
          method:'POST',
-         body:data
+         body:data,
        });
        const uploadImageURL = await res.json()
        console.log('upload data',uploadImageURL.url);
@@ -80,7 +86,7 @@ export default function profile() {
   
       const res = await fetch(`/api/user/update/${currentUser?._id}`, {
         method: 'POST',
-        // credentials: 'include',
+        credentials: 'include',
         headers: { 
           'Content-Type': 'application/json',
          },
@@ -107,6 +113,40 @@ export default function profile() {
   };
 
   console.log('infomations--',formData);
+  
+  const handleDeleteAccount =async() => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      try {
+        dispatch(deleteUserStart())
+        const res = await fetch(`/api/user/delete/${currentUser._id}`,{
+          method:'DELETE',
+          credentials: 'include',
+        })
+        const data = await res.json();
+        console.log("datafrom delete",data);
+        
+        if(data.success===false){
+          dispatch(deleteUserFailure(data))
+          return;
+        }
+        dispatch(deleteUserSuccess(data))
+        Swal.fire("Deleted!", "Your account has been deleted.", "success");
+  
+      } catch (error) {
+        dispatch(deleteUserFailure(error))
+        Swal.fire("Error!", "Something went wrong.", "error");
+      }
+    })
+    
+  }
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'> Profile  </h1>
@@ -124,7 +164,7 @@ export default function profile() {
         <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>update</button>
       </form>
       <div className='flex justify-between mt-5'>
-        <span className='text-red-700 cursor-pointer'>Delete Account</span>
+        <span onClick={handleDeleteAccount} className='text-red-700 cursor-pointer'>Delete Account</span>
         <span className='text-red-500 cursor-pointer'>Sign Out</span>
       </div>
 

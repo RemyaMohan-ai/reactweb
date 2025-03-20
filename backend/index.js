@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO)
 const app = express()
 
 app.use(express.json())
-// app.use(express.urlencoded({extends:true}))
+app.use(express.urlencoded({extends:true}))
 app.use(cookieParser())
 
 app.listen(3000, () => {

@@ -6,6 +6,7 @@ export const verifyToken = (req,res,next) =>{
     console.log('body=',req.body);
     
     const token = req.cookies.access_token ;
+    // const token = req.cookies
 
     console.log("Received token:", token);
 
