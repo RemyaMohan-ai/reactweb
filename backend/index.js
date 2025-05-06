@@ -6,6 +6,7 @@ dotenv.config();
 import cookieParser from 'cookie-parser';
 import userRoute from './routes/userRoute.js'
 import authRoute from './routes/authRoute.js'
+import adminRoute from './routes/adminRoute.js'
 
 mongoose.connect(process.env.MONGO)
 .then(() =>{
@@ -26,6 +27,8 @@ app.listen(3000, () => {
 })
 app.use('/api/user',userRoute)
 app.use('/api/auth',authRoute)
+app.use('/api/admin',adminRoute)
+
 app.use((err, req, res, next)=>{
     const statusCode = err.statusCode || 500;
     const message = err.message || "internal server error"

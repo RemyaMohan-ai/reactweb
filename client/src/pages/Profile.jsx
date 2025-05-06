@@ -158,15 +158,27 @@ export default function profile() {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, Sign Out!",
-    }).then(async (result) => {
-      try {
-        await fetch ('/api/auth/signout');
-        dispatch(signOut())
-        Swal.fire("Signed Out!", "You have been signed out.", "success");
-      } catch (error) {
-        console.log(error);
-        Swal.fire("Error!", "Something went wrong.", "error");
-      }
+    }).then(async (result) => 
+      // try {
+      //   if (result.isConfirmed) { 
+      //   await fetch ('/api/auth/signout');
+      //   dispatch(signOut())
+      //   Swal.fire("Signed Out!", "You have been signed out.", "success");
+      // }} catch (error) {
+      //   console.log(error);
+      //   Swal.fire("Error!", "Something went wrong.", "error");
+      // }
+      {
+        if (result.isConfirmed) {
+          try {
+            await fetch("/api/auth/signout");
+            dispatch(signOut());
+            Swal.fire("Signed Out!", "You have been signed out.", "success");
+          } catch (error) {
+            console.log(error);
+            Swal.fire("Error!", "Something went wrong.", "error");
+          }
+        }
     })
    
   }
@@ -178,7 +190,7 @@ export default function profile() {
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'> Profile  </h1>
       <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-        <input type="file" name="" id="" ref={fileref} hidden accept='image/*' onChange={(e)=>setImage(e.target.files[0])}/>
+        <input type="file" name="" id="" ref={fileref} hidden accept='image/*' onChange={(e)=>setImageUrl(e.target.files[0])}/>
 
         <img src={imageUrl ||currentUser.profilePicture} alt="" className='h-24 w-24 self-center rounded-full cursor-pointer object-cover mt-2'  onClick={()=>fileref.current.click()} />
         
@@ -198,6 +210,7 @@ export default function profile() {
       {/* <p className='text-red-700 mt-5'>{error && 'something went wrong'}</p> */}
       <p className='text-green-700 mt-5'>{updateSuccess && 'user is updated successfully...'}</p>
 
+   
     </div>
   )
 }
